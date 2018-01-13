@@ -167,14 +167,12 @@ function update() {
     {
         player.body.velocity.y = -400;
     }
-    var t = 40;
+    var t = 100;
+    enemy.body.acceleration.x = 250*Math.cos(2*Math.PI*enemyloop/t)-0.125;
+    console.log(enemy.body.acceleration.x);
     if (enemyloop < t/2) {
-        enemy.body.velocity.x = 100;
-
         enemy.animations.play('right');
     } else {
-        enemy.body.velocity.x = -100;
-        
         enemy.animations.play('left');
     }
     enemyloop++;
@@ -194,10 +192,15 @@ function collectStar (player, star) {
 
 function takeDamage (player, enemy) {
     player_life -= 5;
-    player.body.x += enemy.body.velocity.x/5;
+    player.body.velocity.x += 10*enemy.body.velocity.x;
+    //player.body.acceleration.x = -enemy.body.velocity.x/10;
     lifeText.text = 'HP: '+String(player_life);
+    //setTimeout(bounce_off, 200);
 }
 
+function bounce_off (player) {
+    player.body.acceleration.x = 0;
+}
 </script>
 
 </body>

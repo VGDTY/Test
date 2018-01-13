@@ -1,0 +1,68 @@
+<!doctype html> 
+<html lang="en"> 
+<head> 
+	<meta charset="UTF-8" />
+    <title>Phaser - Testing</title>
+    <script src="//cdn.jsdelivr.net/phaser/2.2.2/phaser.min.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<script type="text/javascript">
+var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {preload: preload, create: create, update: update });
+
+function preload(){
+    game.load.image('background', 'assets/sky.png');
+    game.load.image('ground', 'assets/platform.png');
+    game.load.image('star', 'assets/star.png');
+    game.load.spritesheet('dude', 'assets/dude.png', 32, 48, 9);
+}
+var player;
+
+var border;
+var stars;
+
+var score;
+var scoreText;
+
+function create(){
+    game.physics.startSystem(Phaser.Physics.ARCADE);
+
+    game.add.sprite(0, 0, 'background');
+
+    border = game.add.group();
+    border.enableBody = true;
+    var bottom = border.create(0, 0, 'ground');
+    bottom.scale.setTo(2, 2);
+    bottom.body.immovable = true;
+
+    var top = border.create(0, game.world.height - 64, 'ground');
+    top.scale.setTo(2, 2);
+    top.body.immovable = true;
+
+    var left = border.create(64, 0, 'ground');
+    left.scale.setTo(2, 2);
+    left.body.immovable = true;
+    left.angle = 90;
+
+    var right = border.create(game.world.width, 0, 'ground');
+    right.scale.setTo(2, 2);
+    right.body.immovable = true;
+    right.angle = 90;
+
+    player = game.add.sprite(64, game.world.height - 150, 'dude');
+    player.animations.add('left', [0, 1, 2, 3], 10, true);
+    player.animations.add('right', [5, 6, 7, 8], 10, true);
+}
+
+function update(){
+
+}
+</script>
+
+</body>
+</html>
