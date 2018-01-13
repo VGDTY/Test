@@ -2,7 +2,7 @@
 <html lang="en"> 
 <head> 
 	<meta charset="UTF-8" />
-    <title>Phaser - Making your first game, part 8</title>
+    <title>Phaser - Testing</title>
     <script src="//cdn.jsdelivr.net/phaser/2.2.2/phaser.min.js"></script>
     <style type="text/css">
         body {
@@ -21,15 +21,26 @@ function preload() {
     game.load.image('sky', 'assets/sky.png');
     game.load.image('ground', 'assets/platform.png');
     game.load.image('star', 'assets/star.png');
-    game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
+    game.load.image('diamod', 'assets/diamond.png');
+    game.load.image('firstaid', 'assets/firstaid.png');
+    game.load.spritesheet('baddie', 'assets/baddie.png', 32, 48, 4);
+    game.load.spritesheet('dude', 'assets/dude.png', 32, 48, 9);
 
 }
 
 var player;
+var player_life = 10;
+
 var platforms;
 var cursors;
 
 var stars;
+var enemies;
+var enemy;
+var score = 0;
+var scoreText;
+
+var gravity = 500;
 
 function create() {
 
@@ -69,7 +80,7 @@ function create() {
 
     //  Player physics properties. Give the little guy a slight bounce.
     player.body.bounce.y = 0.2;
-    player.body.gravity.y = 300;
+    player.body.gravity.y = gravity;
     player.body.collideWorldBounds = true;
 
     //  Our two animations, walking left and right.
@@ -89,11 +100,25 @@ function create() {
         var star = stars.create(i * 70, 0, 'star');
 
         //  Let gravity do its thing
-        star.body.gravity.y = 300;
+        star.body.gravity.y = gravity;
 
         //  This just gives each star a slightly random bounce value
-        star.body.bounce.y = 0.7 + Math.random() * 0.2;
+        star.body.bounce.y = 0.4 + Math.random() * 0.2;
     }
+
+    enemy = game.add.sprite(32, game.world.height - 500, 'baddie');
+    game.physics.arcade.enable(enemy);
+    enemy.body.gravity.y = gravity;
+    enemy.body.bounce.y = 0.2;
+    enemy.body.collideWorldBounds = true;
+    enemy.animations.add('left', [0, 1, 2], 4, true);
+    //enemy.animations.add('right', [2, 3], 4, true);
+
+    //  The score
+    scoreText = game.add.text(16, 8, 'Score: 0', { fontSize: '32px', fill: '#000' });
+
+    // Life
+    lifeText = game.add.text(16, 32, 'HP: '+String(player_life), { fontSize: '32px', fill: '#000'});
 
     //  Our controls.
     cursors = game.input.keyboard.createCursorKeys();
@@ -105,9 +130,11 @@ function update() {
     //  Collide the player and the stars with the platforms
     var hitPlatform = game.physics.arcade.collide(player, platforms);
     game.physics.arcade.collide(stars, platforms);
+    game.physics.arcade.collide(enemy, platforms);
 
     //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
     game.physics.arcade.overlap(player, stars, collectStar, null, this);
+    //game.physics.arcade.overlap(player, enemy, takeDamage, null, this);
 
     //  Reset the players velocity (movement)
     player.body.velocity.x = 0;
@@ -137,7 +164,7 @@ function update() {
     //  Allow the player to jump if they are touching the ground.
     if (cursors.up.isDown && player.body.touching.down && hitPlatform)
     {
-        player.body.velocity.y = -350;
+        player.body.velocity.y = -400;
     }
 
 }
@@ -146,6 +173,14 @@ function collectStar (player, star) {
     
     // Removes the star from the screen
     star.kill();
+
+    //  Add and update the score
+    score += 10;
+    scoreText.text = 'Score: ' + score;
+
+}
+
+function takeDamage (player, enemy) {
 
 }
 
