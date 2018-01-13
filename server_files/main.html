@@ -37,6 +37,7 @@ var cursors;
 var stars;
 var enemies;
 var enemy;
+var enemyloop = 0;
 var score = 0;
 var scoreText;
 
@@ -111,7 +112,7 @@ function create() {
     enemy.body.gravity.y = gravity;
     enemy.body.bounce.y = 0.2;
     enemy.body.collideWorldBounds = true;
-    enemy.animations.add('left', [0, 1, 2], 4, true);
+    //enemy.animations.add('left', [0, 1], 4, true);
     //enemy.animations.add('right', [2, 3], 4, true);
 
     //  The score
@@ -134,7 +135,7 @@ function update() {
 
     //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
     game.physics.arcade.overlap(player, stars, collectStar, null, this);
-    //game.physics.arcade.overlap(player, enemy, takeDamage, null, this);
+    game.physics.arcade.overlap(player, enemy, takeDamage, null, this);
 
     //  Reset the players velocity (movement)
     player.body.velocity.x = 0;
@@ -166,7 +167,18 @@ function update() {
     {
         player.body.velocity.y = -400;
     }
+    var t = 40;
+    if (enemyloop < t/2) {
+        enemy.body.velocity.x = 100;
 
+        enemy.animations.play('right');
+    } else {
+        enemy.body.velocity.x = -100;
+        
+        enemy.animations.play('left');
+    }
+    enemyloop++;
+    enemyloop %= t;
 }
 
 function collectStar (player, star) {
@@ -181,7 +193,9 @@ function collectStar (player, star) {
 }
 
 function takeDamage (player, enemy) {
-
+    player_life -= 5;
+    player.body.x += enemy.body.velocity.x/5;
+    lifeText.text = 'HP: '+String(player_life);
 }
 
 </script>
