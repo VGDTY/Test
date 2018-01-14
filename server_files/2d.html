@@ -13,7 +13,7 @@
 <body>
 
 <script type="text/javascript">
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {preload: preload, create: create, update: update });
+var game = new Phaser.Game(800, 640, Phaser.AUTO, '', {preload: preload, create: create, update: update });
 
 function preload(){
     game.load.image('background', 'assets/sky.png');
@@ -22,12 +22,15 @@ function preload(){
     game.load.spritesheet('dude', 'assets/dude.png', 32, 48, 9);
 }
 var player;
+var player_moving = false;
 
 var border;
 var stars;
 
 var score;
 var scoreText;
+
+var cursors;
 
 function create(){
     game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -36,6 +39,7 @@ function create(){
 
     border = game.add.group();
     border.enableBody = true;
+
     var bottom = border.create(0, 0, 'ground');
     bottom.scale.setTo(2, 2);
     bottom.body.immovable = true;
@@ -44,23 +48,76 @@ function create(){
     top.scale.setTo(2, 2);
     top.body.immovable = true;
 
-    var left = border.create(64, 0, 'ground');
-    left.scale.setTo(2, 2);
+    var left = border.create(-336, 0, 'ground');
+    left.scale.setTo(1, 20);
     left.body.immovable = true;
-    left.angle = 90;
 
-    var right = border.create(game.world.width, 0, 'ground');
-    right.scale.setTo(2, 2);
+    var right = border.create(game.world.width - 64, 0, 'ground');
+    right.scale.setTo(1, 20);
     right.body.immovable = true;
-    right.angle = 90;
 
-    player = game.add.sprite(64, game.world.height - 150, 'dude');
+    player = game.add.sprite(64, game.world.height - 112, 'dude');
     player.animations.add('left', [0, 1, 2, 3], 10, true);
     player.animations.add('right', [5, 6, 7, 8], 10, true);
+
+    stars = game.add.group();
+    stars.enableBody = true;
+
+    for (var i = 0; i < 21; i++){
+        for (var j = 0; j < 10; j++){
+            if (getRandomInt(0, 2) == 1){
+                var star = stars.create(i * 32 + 64 + 4, j * 48 + 64 + 8, 'star');
+            }
+        }
+    }
+
+    game.physics.arcade.enable(player);
+    player.body.collideWorldBounds = true;
+
+    cursors = game.input.keyboard.createCursorKeys();
 }
 
 function update(){
+    
+    var hitPlatform = game.physics.arcade.collide(player, border);
+    
+    if (cursors.up.isDown && !player_moving) {
+        player.body.acceleration.y = -2400;
+        player_moving = true;
+        setTimeout(stop, 200, player);
+    } else if (cursors.down.isDown && !player_moving) {
+        player.body.acceleration.y = 2400;
+        player_moving = true;
+        setTimeout(stop, 200, player);
+    } else if (cursors.right.isDown && !player_moving) {
+        player.body.acceleration.x = 1600;
+        player.animations.play('right');
+        player_moving = true;
+        setTimeout(stop, 200, player);
+    } else if (cursors.left.isDown && !player_moving) {
+        player.animations.play('left');
+        player.body.acceleration.x = -1600;
+        player_moving = true;
+        setTimeout(stop, 200, player);
+    } 
+    if (player.body.acceleration.x == 0 && player.body.acceleration.y == 0) {
+        player.animations.stop();
+        player.frame = 4;
+    }
+}
 
+function stop(player) {
+    player_moving = false;
+    player.body.acceleration.x = 0;
+    player.body.acceleration.y = 0;
+    player.body.velocity.x = 0;
+    player.body.velocity.y = 0;
+}
+
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
 }
 </script>
 
