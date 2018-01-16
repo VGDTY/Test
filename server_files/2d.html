@@ -27,8 +27,11 @@ var player_moving = false;
 var border;
 var stars;
 
-var score;
+var score = 0;
 var scoreText;
+
+var time = 1;
+var deltaT = 500; //ms
 
 var cursors;
 
@@ -62,7 +65,7 @@ function create(){
 
     stars = game.add.group();
     stars.enableBody = true;
-
+    
     for (var i = 0; i < 21; i++){
         for (var j = 0; j < 10; j++){
             if (getRandomInt(0, 2) == 1){
@@ -71,53 +74,60 @@ function create(){
         }
     }
 
+    scoreText = game.add.text(16, 8, '', {fontsize: '32px', fill: '#000'});
+
     game.physics.arcade.enable(player);
     player.body.collideWorldBounds = true;
 
     cursors = game.input.keyboard.createCursorKeys();
+    //setTimeout(framerate, deltaT);
 }
 
 function update(){
-    
+    //score++;
+
     var hitPlatform = game.physics.arcade.collide(player, border);
+    game.physics.arcade.overlap(player, stars, collectStar, null, this);
     
-    if (cursors.up.isDown && !player_moving) {
-        player.body.acceleration.y = -2400;
-        player_moving = true;
-        setTimeout(stop, 200, player);
-    } else if (cursors.down.isDown && !player_moving) {
-        player.body.acceleration.y = 2400;
-        player_moving = true;
-        setTimeout(stop, 200, player);
-    } else if (cursors.right.isDown && !player_moving) {
-        player.body.acceleration.x = 1600;
+    if (cursors.up.isDown) {
+        player.body.velocity.y = -160;
+    } else if (cursors.down.isDown) {
+        player.body.velocity.y = 160;
+    } else {
+        player.body.velocity.y = 0;
+    }
+    if (cursors.right.isDown) {
+        player.body.velocity.x = 160;
         player.animations.play('right');
-        player_moving = true;
-        setTimeout(stop, 200, player);
-    } else if (cursors.left.isDown && !player_moving) {
+    } else if (cursors.left.isDown) {
         player.animations.play('left');
-        player.body.acceleration.x = -1600;
-        player_moving = true;
-        setTimeout(stop, 200, player);
-    } 
-    if (player.body.acceleration.x == 0 && player.body.acceleration.y == 0) {
+        player.body.velocity.x = -160;
+    } else {
+        player.body.velocity.x = 0;
+    }
+    if (!cursors.right.isDown && !cursors.left.isDown && !cursors.up.isDown && !cursors.down.isDown) {
         player.animations.stop();
         player.frame = 4;
     }
 }
 
-function stop(player) {
-    player_moving = false;
-    player.body.acceleration.x = 0;
-    player.body.acceleration.y = 0;
-    player.body.velocity.x = 0;
-    player.body.velocity.y = 0;
+function collectStar (player, star) {
+    star.kill();
+
+    score += 10;
+    scoreText.text = 'Score: ' + score;
 }
 
 function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+}
+
+function framerate(){
+    scoreText.text = String((score*1000)/(time*deltaT));
+    time++;
+    setTimeout(framerate, deltaT);
 }
 </script>
 
