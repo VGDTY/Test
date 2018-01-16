@@ -1,18 +1,4 @@
-<!doctype html> 
-<html lang="en"> 
-<head> 
-	<meta charset="UTF-8" />
-    <title>Phaser - Testing</title>
-    <script src="//cdn.jsdelivr.net/phaser/2.2.2/phaser.min.js"></script>
-    <style type="text/css">
-        body {
-            margin: 0;
-        }
-    </style>
-</head>
-<body>
 
-<script type="text/javascript">
 var game = new Phaser.Game(800, 640, Phaser.AUTO, '', {preload: preload, create: create, update: update });
 
 function preload(){
@@ -36,7 +22,7 @@ var deltaT = 500; //ms
 var cursors;
 
 function create(){
-    game.physics.startSystem(Phaser.Physics.ARCADE);
+	game.physics.startSystem(Phaser.Physics.ARCADE);
 
     game.add.sprite(0, 0, 'background');
 
@@ -65,7 +51,7 @@ function create(){
 
     stars = game.add.group();
     stars.enableBody = true;
-    
+
     for (var i = 0; i < 21; i++){
         for (var j = 0; j < 10; j++){
             if (getRandomInt(0, 2) == 1){
@@ -88,7 +74,7 @@ function update(){
 
     var hitPlatform = game.physics.arcade.collide(player, border);
     game.physics.arcade.overlap(player, stars, collectStar, null, this);
-    
+
     if (cursors.up.isDown) {
         player.body.velocity.y = -160;
     } else if (cursors.down.isDown) {
@@ -129,7 +115,3 @@ function framerate(){
     time++;
     setTimeout(framerate, deltaT);
 }
-</script>
-
-</body>
-</html>
