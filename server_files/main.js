@@ -2,8 +2,8 @@
 var game = new Phaser.Game(1344, 768, Phaser.AUTO, '', {preload: preload, create: create, update: update });
 
 function preload(){
-    game.load.image('background', 'assets/checkersx400.gif');
-    game.load.image('ground', 'assets/platform2.jpg');
+    game.load.image('background', 'assets/room-1');
+    game.load.image('ground', 'assets/platform.jpg');
     game.load.image('star', 'assets/star.png');
     game.load.spritesheet('dude', 'assets/dude.png', 32, 48, 9);
 }
@@ -31,25 +31,25 @@ function create(){
     border = game.add.group();
     border.enableBody = true;
 
-    /*
-    var bottom = border.create(0, game.world.height - 64, 'ground');
-    bottom.scale.setTo(4, 4);
+    
+    var bottom = border.create(game.world.height - 800, 644,);
+    bottom.scale.setTo(44, 1);
     bottom.body.immovable = true;
-    //*/
+    
 
-    var top = border.create(0, 0, 'ground');
-    top.scale.setTo(4, 4);
+    var top = border.create(0, 180,);
+    top.scale.setTo(44, 1);
     top.body.immovable = true;
 
-    var left = border.create(-336, 0, 'ground');
+    var left = border.create(158, 0,);
     left.scale.setTo(1, 24);
     left.body.immovable = true;
 
-    var right = border.create(game.world.width - 64, 0, 'ground');
+    var right = border.create(game.world.width -192, 0,);
     right.scale.setTo(1, 24);
     right.body.immovable = true;
 
-    player = game.add.sprite(64, game.world.height - 160, 'dude');
+    player = game.add.sprite(256, 250, 'dude');
     player.scale.setTo(2, 2);
     player.animations.add('left', [0, 1, 2, 3], 10, true);
     player.animations.add('right', [5, 6, 7, 8], 10, true);
