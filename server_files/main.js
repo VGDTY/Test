@@ -2,16 +2,16 @@
 var game = new Phaser.Game(1344, 768, Phaser.AUTO, '', {preload: preload, create: create, update: update });
 
 function preload(){
-    game.load.image('background', 'assets/room-1');
+    game.load.image('background', 'assets/Room-1.png');
     game.load.image('ground', 'assets/platform.jpg');
     game.load.image('star', 'assets/star.png');
     game.load.spritesheet('dude', 'assets/dude.png', 32, 48, 9);
 }
 
 var player;
-var player_moving = false;
 
 var border;
+
 var stars;
 
 var score = 0;
@@ -21,54 +21,48 @@ var time = 1;
 var deltaT = 500; //ms
 
 var cursors;
-var scalefactor = 1;
+var scaleFactor = 1;
 
 function create(){
 	game.physics.startSystem(Phaser.Physics.ARCADE);
 
-    game.add.sprite(0, 0, 'background').scale.setTo(scalefactor, scalefactor);
+    game.add.sprite(0, 0, 'background').scale.setTo(scaleFactor, scaleFactor);
 
     border = game.add.group();
     border.enableBody = true;
-
     
-    var bottom = border.create(game.world.height - 800, 644,);
+    var bottom = border.create(game.world.height - 800, 644, null);
     bottom.scale.setTo(44, 1);
     bottom.body.immovable = true;
-    
 
-    var top = border.create(0, 180,);
+    var top = border.create(0, 180, null);
     top.scale.setTo(44, 1);
     top.body.immovable = true;
 
-    var left = border.create(158, 0,);
+    var left = border.create(160, 0, null);
     left.scale.setTo(1, 24);
     left.body.immovable = true;
 
-    var right = border.create(game.world.width -192, 0,);
+    var right = border.create(game.world.width - 190, 0, null);
     right.scale.setTo(1, 24);
     right.body.immovable = true;
 
-    player = game.add.sprite(256, 250, 'dude');
-    player.scale.setTo(2, 2);
-    player.animations.add('left', [0, 1, 2, 3], 10, true);
-    player.animations.add('right', [5, 6, 7, 8], 10, true);
+    //player = game.add.sprite(256, 250, 'dude');
+    player = new Player(game, 256, 250);
+    game.add.existing(player);
 
     stars = game.add.group();
     stars.enableBody = true;
 
-    for (var i = 0; i < 21; i++){
-        for (var j = 0; j < 10; j++){
+    for (var i = 0; i < 30; i++){
+        for (var j = 0; j < 8; j++){
             if (getRandomInt(0, 2) == 1){
-                //var star = stars.create(i * 32 + 64 + 4, j * 48 + 64 + 8, 'star');
+                var star = stars.create(i * 32 + 192 + 4, j * 48 + 256 + 8, 'star');
             }
         }
     }
 
-    scoreText = game.add.text(16, 8, '', {fontsize: '32px', fill: '#000'});
-
-    game.physics.arcade.enable(player);
-    player.body.collideWorldBounds = true;
+    scoreText = game.add.text(16, 8, '', {fontsize: '32px', fill: '#FFF'});
 
     cursors = game.input.keyboard.createCursorKeys();
     //setTimeout(framerate, deltaT);
@@ -76,29 +70,22 @@ function create(){
 
 function update(){
     //score++;
-
-    var hitPlatform = game.physics.arcade.collide(player, border);
     game.physics.arcade.overlap(player, stars, collectStar, null, this);
+    game.physics.arcade.collide(player, border, collisionHandler, null, this);
 
     if (cursors.up.isDown) {
-        player.body.velocity.y = -280;
+        player.move('up');
     } else if (cursors.down.isDown) {
-        player.body.velocity.y = 280;
+        player.move('down');
     } else {
-        player.body.velocity.y = 0;
+        player.move('y');
     }
     if (cursors.right.isDown) {
-        player.body.velocity.x = 280;
-        player.animations.play('right');
+        player.move('right');
     } else if (cursors.left.isDown) {
-        player.animations.play('left');
-        player.body.velocity.x = -280;
+        player.move('left');
     } else {
-        player.body.velocity.x = 0;
-    }
-    if (!cursors.right.isDown && !cursors.left.isDown && !cursors.up.isDown && !cursors.down.isDown) {
-        player.animations.stop();
-        player.frame = 4;
+        player.move('x');
     }
 }
 
@@ -107,6 +94,12 @@ function collectStar (player, star) {
 
     score += 10;
     scoreText.text = 'Score: ' + score;
+}
+
+function collisionHandler (obj1, obj2){
+    if (obj1 instanceof Player){
+        obj1.collision(obj2);
+    }
 }
 
 function getRandomInt(min, max) {
