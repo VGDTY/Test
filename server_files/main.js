@@ -7,7 +7,6 @@ function preload(){
     game.load.image('star', 'assets/star.png');
     game.load.spritesheet('dude', 'assets/dude.png', 32, 48, 9);
 }
-
 var player;
 
 var border;
@@ -31,20 +30,20 @@ function create(){
     border = game.add.group();
     border.enableBody = true;
     
-    var bottom = border.create(game.world.height - 800, 644, null);
-    bottom.scale.setTo(44, 1);
+    var bottom = border.create(game.world.height - 800, 515, null);
+    bottom.scale.setTo(39, 1);
     bottom.body.immovable = true;
 
-    var top = border.create(0, 180, null);
-    top.scale.setTo(44, 1);
+    var top = border.create(0, 51, null);
+    top.scale.setTo(38, 1);
     top.body.immovable = true;
 
-    var left = border.create(160, 0, null);
-    left.scale.setTo(1, 24);
+    var left = border.create(94, 0, null);
+    left.scale.setTo(1, 20);
     left.body.immovable = true;
 
-    var right = border.create(game.world.width - 190, 0, null);
-    right.scale.setTo(1, 24);
+    var right = border.create(game.world.width - 254, 0, null);
+    right.scale.setTo(1, 20);
     right.body.immovable = true;
 
     //player = game.add.sprite(256, 250, 'dude');
