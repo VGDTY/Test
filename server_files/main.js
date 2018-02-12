@@ -33,19 +33,19 @@ function create(){
     border = game.add.group();
     border.enableBody = true;
 
-    var bottom = border.create(game.world.height - 800, 510, 'ground');
+    var bottom = border.create(game.world.height - 800, 510, null);
     bottom.scale.setTo(39, 1);
     bottom.body.immovable = true;
 
-    var top = border.create(0, 51, 'ground');
+    var top = border.create(0, 51, null);
     top.scale.setTo(38, 1);
     top.body.immovable = true;
 
-    var left = border.create(90, 0, 'ground');
+    var left = border.create(90, 0, null);
     left.scale.setTo(1, 20);
     left.body.immovable = true;
 
-    var right = border.create(game.world.width - 250, 0, 'ground');
+    var right = border.create(game.world.width - 250, 0, null);
     right.scale.setTo(1, 20);
     right.body.immovable = true;
 
