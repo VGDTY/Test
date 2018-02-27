@@ -40,15 +40,15 @@ function create(){
     bottom.scale.setTo(39, 1);
     bottom.body.immovable = true;
 
-    var top = border.create(0, 51, null);
+    var top = border.create(0, 128 + 32, null);
     top.scale.setTo(38, 1);
     top.body.immovable = true;
 
-    var left = border.create(90, 0, null);
+    var left = border.create(154, 0, null);
     left.scale.setTo(1, 20);
     left.body.immovable = true;
 
-    var right = border.create(game.world.width - 250, 0, null);
+    var right = border.create(game.world.width - 184, 0, null);
     right.scale.setTo(1, 20);
     right.body.immovable = true;
 
@@ -74,7 +74,6 @@ function create(){
     ledge.body.immovable = true;
     //*/
 
-    //player = game.add.sprite(256, 250, 'dude');
     player = new Player(game, 256, 250);
     game.add.existing(player);
     /**
