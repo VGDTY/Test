@@ -1,7 +1,7 @@
 var Player = (function(){
     function Player(game, x, y){
         Phaser.Sprite.call(this, game, x, y, 'dude');
-        
+        //console.log(x, y);
         this.scale.setTo(2, 2);
 
         this.animations.add('left', [0, 1, 2, 3], 10, true);
@@ -16,30 +16,34 @@ var Player = (function(){
         this.dir_y = 0;
         this.velocity = 280;
 
-        this.up = false;
-        this.down = false;
-        this.right = false;
-        this.left = false;
+        this.mup = false;
+        this.mdown = false;
+        this.mright = false;
+        this.mleft = false;
         this.last = 0;
 
         this.collision = function (obj){
-            if (obj.hasOwnProperty('body')){
-                this.up = this.body.y - obj.body.y < 0;
-                this.down = this.body.y - obj.body.y > 0;
-                this.right = this.body.x - obj.body.x < 0;
-                this.left = this.body.x - obj.body.x > 0;
+            if (obj instanceof Door){
+                console.log(obj);
             }
+            if (obj.hasOwnProperty('body')){
+                this.mup = this.body.y - obj.body.y < 0;
+                this.mdown = this.body.y - obj.body.y > 0;
+                this.mright = this.body.x - obj.body.x < 0;
+                this.mleft = this.body.x - obj.body.x > 0;
+            }
+            //console.log("Collide");
             /*
             console.log("up, down, right, left")
-            console.log(this.up);
-            console.log(this.down);
-            console.log(this.right);
-            console.log(this.left);
+            console.log(this.mup);
+            console.log(this.mdown);
+            console.log(this.mright);
+            console.log(this.mleft);
             //*/
         }
 
         this.move = function (dir){
-            //console.log(dir);
+            //console.log(this.mright, this.mleft);
             switch(dir){
                 case 'up':
                     this.dir_y = -1;
@@ -62,15 +66,15 @@ var Player = (function(){
             }
             switch(this.dir_x){
                 case -1:
-                    if (!this.left){
+                    if (!this.mleft){
                         this.animations.play('left');
                         this.last = -4;
                     } else {
                         this.dir_x = 0;
                     }
                     break;
-                case 1:
-                    if (!this.right){
+                case 1:                    
+                    if (!this.mright){
                         this.animations.play('right');
                         this.last = 1;
                     } else {
@@ -80,7 +84,7 @@ var Player = (function(){
                 default:
                     switch(this.dir_y){
                         case -1:
-                            if (!this.down){
+                            if (!this.mdown){
                                 this.animations.play('down');
                                 this.last = 0;
                             } else {
@@ -88,7 +92,7 @@ var Player = (function(){
                             }
                             break;
                         case 1:
-                            if (!this.up){
+                            if (!this.mup){
                                 this.animations.play('up');
                                 this.last = 0;
                             } else {
@@ -98,18 +102,19 @@ var Player = (function(){
                     }
             }
             if (this.dir_x == 0 && this.dir_y == 0){
-                this.animations.stop();
                 this.frame = 4 + this.last;
+                this.animations.stop();
             }
 
             this.body.velocity.y = this.dir_y*this.velocity;
             this.body.velocity.x = this.dir_x*this.velocity;
 
-            this.up = false;
-            this.down = false;
-            this.right = false;
-            this.left = false;
+            this.mup = false;
+            this.mdown = false;
+            this.mright = false;
+            this.mleft = false;
         }
+        //console.log(this);
     }
 
     Player.prototype = Object.create(Phaser.Sprite.prototype);

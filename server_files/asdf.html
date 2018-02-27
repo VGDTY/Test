@@ -3,7 +3,7 @@
 <head> 
 	<meta charset="UTF-8" />
     <title>Phaser - Testing</title>
-    <script src="//cdn.jsdelivr.net/phaser/2.2.2/phaser.min.js"></script>
+    <script src="//cdn.jsdelivr.net/phaser/2.6.2/phaser.min.js"></script>
     <style type="text/css">
         body {
             margin: 0;
@@ -25,6 +25,7 @@ function preload() {
     game.load.image('firstaid', 'assets/firstaid.png');
     game.load.spritesheet('baddie', 'assets/baddie.png', 32, 48, 4);
     game.load.spritesheet('dude', 'assets/dude.png', 32, 48, 9);
+    game.load.json('room1','Rooms/room1.json');
 
 }
 
@@ -41,7 +42,7 @@ var enemyloop = 0;
 var score = 0;
 var scoreText;
 
-var gravity = 500;
+var gravity = 1000;
 
 function create() {
 
@@ -124,6 +125,11 @@ function create() {
     //  Our controls.
     cursors = game.input.keyboard.createCursorKeys();
     
+    room = game.cache.getJSON('room1');
+    console.log(room);
+    console.log(room.background);
+    console.log(room.background.file);
+    console.log(room.doors[0]);
 }
 
 function update() {
@@ -165,11 +171,11 @@ function update() {
     //  Allow the player to jump if they are touching the ground.
     if (cursors.up.isDown && player.body.touching.down && hitPlatform)
     {
-        player.body.velocity.y = -400;
+        player.body.velocity.y = -650;
     }
     var t = 100;
     enemy.body.acceleration.x = 250*Math.cos(2*Math.PI*enemyloop/t)-0.125;
-    console.log(enemy.body.acceleration.x);
+    //console.log(enemy.body.acceleration.x);
     if (enemyloop < t/2) {
         enemy.animations.play('right');
     } else {

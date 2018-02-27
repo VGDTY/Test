@@ -1,0 +1,17 @@
+{
+    "background" : {
+        "file" : "background",
+        "xsize" : 1216,
+        "ysize" : 644,
+        "xrealsize" : 960,
+        "yrealsize" : 388
+    },
+    "doors": [
+        {
+            "room" : "room2",
+            "sprite" : "door1",
+            "x" : 340,
+            "y" : -136
+        }
+    ]
+}
