@@ -7,6 +7,9 @@ function preload(){
     game.load.image('star', 'assets/star.png');
     game.load.image('ember', 'assets/ember.png');
     game.load.spritesheet('dude', 'assets/dude.png', 32, 48, 9);
+
+    game.load.image('door1', 'assets/door-frontx400.png');
+    game.load.json('room1','Rooms/room1.json');
 }
 var player;
 
@@ -26,14 +29,14 @@ var scaleFactor = 1;
 
 function create(){
 	game.physics.startSystem(Phaser.Physics.ARCADE);
-
-    game.add.sprite(0, 0, 'background').scale.setTo(scaleFactor, scaleFactor);
-    game.add.sprite('ember').scale.setTo(scaleFactor, scaleFactor);
+    var room = new Room(game, 'room1');
+    //game.add.sprite(0, 0, 'background').scale.setTo(scaleFactor, scaleFactor);
+    //game.add.sprite('ember').scale.setTo(scaleFactor, scaleFactor);
 
     border = game.add.group();
     border.enableBody = true;
 
-    var bottom = border.create(game.world.height - 800, 510, null);
+    var bottom = border.create(0, game.world.height - 128, null);
     bottom.scale.setTo(39, 1);
     bottom.body.immovable = true;
 
@@ -53,7 +56,7 @@ function create(){
     platforms = game.add.group();
     platforms.enableBody = true;
 
-    
+    /**
     var ledge = platforms.create(275, 200, 'ember');
     ledge.scale.setTo(.75, .75);
     ledge.body.immovable = true;
@@ -69,11 +72,12 @@ function create(){
     var ledge = platforms.create(850, 400, 'ember');
     ledge.scale.setTo(.75, .75);
     ledge.body.immovable = true;
+    //*/
 
     //player = game.add.sprite(256, 250, 'dude');
     player = new Player(game, 256, 250);
     game.add.existing(player);
-
+    /**
     stars = game.add.group();
     stars.enableBody = true;
 
@@ -84,6 +88,7 @@ function create(){
             }
         }
     }
+    //*/
 
     scoreText = game.add.text(16, 8, '', {fontsize: '32px', fill: '#FFF'});
 
