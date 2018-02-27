@@ -34,10 +34,18 @@
             "items": {
                 "type" : "object",
                 "properties": {
-                    "room" : "string",
-                    "sprite" : "string",
-                    "x" : "number",
-                    "y" : "number"
+                    "room" : {
+                        "type": "string"
+                    },
+                    "sprite" : {
+                        "type": "string"
+                    },
+                    "x" : {
+                        "type": "number"
+                    },
+                    "y" : {
+                        "type": "number"
+                    }
                 }
             }
         },
@@ -55,8 +63,12 @@
             "items": {
                 "type" : "object",
                 "properties": {
-                    "health" : "integer",
-                    "defense" : "integer",
+                    "health" : {
+                        "type": "integer"
+                    },
+                    "defense" : {
+                        "type": "integer"
+                    },
                     "special" : {
                         "type" : "array",
                         "items": {
