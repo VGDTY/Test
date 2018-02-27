@@ -30,6 +30,7 @@ var scaleFactor = 1;
 function create(){
 	game.physics.startSystem(Phaser.Physics.ARCADE);
     var room = new Room(game, 'room1');
+    //console.log(room);
     //game.add.sprite(0, 0, 'background').scale.setTo(scaleFactor, scaleFactor);
     //game.add.sprite('ember').scale.setTo(scaleFactor, scaleFactor);
 

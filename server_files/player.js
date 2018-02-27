@@ -23,6 +23,7 @@ var Player = (function(){
         this.last = 0;
 
         this.collision = function (obj){
+            console.log(this.x, this.y);
             if (obj instanceof Door){
                 console.log(obj);
             }
