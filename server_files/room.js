@@ -4,10 +4,10 @@ var Room = (function(){
         //console.log(this.properties.background.file);
         this.background = game.add.image(64, 128, this.properties.background.file);
         this.doors = [];
-        this.properties.doors.forEach(element => {
-            console.log("Door" ,element);
-            this.doors.push(new Door(game, element.x >= 0 ? element.x : game.world.width - element.x, element.y >= 0 ? element.y : game.world.height - element.y, element.sprite, element.room));
-            console.log(element.sprite);
+        this.properties.doors.forEach(e => {
+            console.log("Door" ,e);
+            this.doors.push(new Door(game, e.x >= 0 ? e.x : game.world.width + e.x, e.y >= 0 ? e.y : game.world.height + e.y, e.sprite, e.room));
+            console.log(e.sprite);
         });
     }
 

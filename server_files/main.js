@@ -3,13 +3,13 @@ var game = new Phaser.Game(1344, 768, Phaser.AUTO, '', {preload: preload, create
 
 function preload(){
     game.load.image('background', 'assets/Room-1.png');
-    game.load.image('ground', 'assets/platform.jpg');
+    //game.load.image('ground', 'assets/platform.jpg');
     game.load.image('star', 'assets/star.png');
     game.load.image('ember', 'assets/ember.png');
     game.load.spritesheet('dude', 'assets/dude.png', 32, 48, 9);
 
     game.load.image('door1', 'assets/door-frontx400.png');
-    game.load.json('room1','Rooms/room1.json');
+    game.load.json('room1','rooms/room1.json');
 }
 var player;
 
@@ -29,8 +29,11 @@ var scaleFactor = 1;
 
 function create(){
 	game.physics.startSystem(Phaser.Physics.ARCADE);
-    var room = new Room(game, 'room1');
+    //var room = new Room(game, 'room1');
     //console.log(room);
+
+    var door = new Door(game, 200, 200, 'door1');
+    var asdf = new test(game);
     //game.add.sprite(0, 0, 'background').scale.setTo(scaleFactor, scaleFactor);
     //game.add.sprite('ember').scale.setTo(scaleFactor, scaleFactor);
 
@@ -126,6 +129,7 @@ function collectStar (player, star) {
 
 function collisionHandler (obj1, obj2){
     if (obj1 instanceof Player){
+        console.log(obj2);
         obj1.collision(obj2);
     }
 }
